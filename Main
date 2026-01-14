@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тесты по начертательной геометрии</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .menu-card {
+            text-align: center;
+        }
+
+        .menu-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .question-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .option.correct {
+            border-color: #38ef7d;
+            background: #e8fff0;
+        }
+
+        .option.incorrect {
+            border-color: #f45c43;
+            background: #fff0f0;
+        }
+
+        .option-letter {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #666;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter {
+            background: #667eea;
+            color: white;
+        }
+
+        .option.correct .option-letter {
+            background: #38ef7d;
+            color: white;
+        }
+
+        .option.incorrect .option-letter {
+            background: #f45c43;
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px;
+        }
+
+        .result-card {
+            text-align: center;
+        }
+
+        .result-score {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .result-item {
+            text-align: center;
+        }
+
+        .result-item-value {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .result-item-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .correct-value {
+            color: #38ef7d;
+        }
+
+        .incorrect-value {
+            color: #f45c43;
+        }
+
+        .block-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .block-btn {
+            padding: 20px 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .block-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .block-btn h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .block-btn p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .settings-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .setting-row label {
+            color: #666;
+        }
+
+        .setting-row input[type="number"] {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            width: 80px;
+            font-size: 1rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #e8fff0;
+            border: 1px solid #38ef7d;
+            color: #0d6832;
+        }
+
+        .feedback.incorrect {
+            background: #fff0f0;
+            border: 1px solid #f45c43;
+            color: #a71d2a;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .result-details {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .navigation .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📐 Начертательная геометрия</h1>
+            <p>Подготовка к экзамену</p>
+        </div>
+
+        <!-- Главное меню -->
+        <div id="menu-screen" class="card menu-card">
+            <h2>Выберите блок вопросов</h2>
+            
+            <div class="block-selector">
+                <div class="block-btn" onclick="selectBlock(1)">
+                    <h3>📚 Блок 1</h3>
+                    <p>40 вопросов</p>
+                    <p style="font-size: 0.8rem; color: #999;">Основы проекций, плоскости, поверхности</p>
+                </div>
+                <div class="block-btn" onclick="selectBlock(2)">
+                    <h3>📖 Блок 2</h3>
+                    <p>40 вопросов</p>
+                    <p style="font-size: 0.8rem; color: #999;">Пересечения, развертки, аксонометрия</p>
+                </div>
+                <div class="block-btn" onclick="selectBlock(3)">
+                    <h3>📗 Блок 3</h3>
+                    <p>30 вопросов</p>
+                    <p style="font-size: 0.8rem; color: #999;">Дополнительные вопросы</p>
+                </div>
+                <div class="block-btn" onclick="selectBlock(0)">
+                    <h3>🎯 Все блоки</h3>
+                    <p>110 вопросов</p>
+                    <p style="font-size: 0.8rem; color: #999;">Полный тест</p>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>⚙️ Настройки теста</h3>
+                <div class="setting-row">
+                    <label for="questionCount">Количество вопросов:</label>
+                    <input type="number" id="questionCount" min="1" max="110" value="20">
+                </div>
+                <div class="setting-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="shuffleQuestions" checked>
+                        Перемешать вопросы
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="shuffleOptions" checked>
+                        Перемешать варианты ответов
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="showFeedback" checked>
+                        Показывать правильный ответ сразу
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="startTest()" id="startBtn" disabled>
+                Начать тест
+            </button>
+        </div>
+
+        <!-- Экран теста -->
+        <div id="test-screen" class="card hidden">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">Правильных</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="incorrectCount">0</div>
+                    <div class="stat-label">Ошибок</div>
+                </div>
+                <div class="stat-item">
+                    <div class="timer" id="timer">00:00</div>
+                    <div class="stat-label">Время</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <div class="question-info">
+                <span id="questionNumber">Вопрос 1 из 20</span>
+                <span id="blockInfo">Блок 1</span>
+            </div>
+
+            <div class="question-text" id="questionText"></div>
+
+            <div class="options" id="optionsContainer"></div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn">
+                    ← Назад
+                </button>
+                <button class="btn btn-secondary" onclick="skipQuestion()" id="skipBtn">
+                    Пропустить
+                </button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">
+                    Далее →
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран результатов -->
+        <div id="result-screen" class="card result-card hidden">
+            <h2>🎉 Тест завершён!</h2>
+            
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-text" id="resultText"></div>
+
+            <div class="result-details">
+                <div class="result-item">
+                    <div class="result-item-value correct-value" id="finalCorrect">0</div>
+                    <div class="result-item-label">Правильных</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-item-value incorrect-value" id="finalIncorrect">0</div>
+                    <div class="result-item-label">Ошибок</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-item-value" id="finalTime">00:00</div>
+                    <div class="result-item-label">Время</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="reviewAnswers()">
+                📋 Просмотреть ответы
+            </button>
+            <button class="btn btn-secondary" onclick="restartTest()">
+                🔄 Пройти заново
+            </button>
+            <button class="btn btn-secondary" onclick="goToMenu()">
+                🏠 В меню
+            </button>
+        </div>
+
+        <!-- Экран просмотра ответов -->
+        <div id="review-screen" class="card hidden">
+            <h2>📋 Просмотр ответов</h2>
+            <div id="reviewContainer"></div>
+            <button class="btn btn-primary" onclick="goToResults()">
+                ← Назад к результатам
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // База вопросов
+        const questionsBlock1 = [
+            {
+                question: "Какой метод является основным для преобразования чертежа прямой общего положения в чертеж прямой уровня?",
+                options: [
+                    "Способ вращения вокруг проецирующей прямой",
+                    "Способ замены плоскостей проекций, где новая ось проводится параллельно проекции прямой",
+                    "Способ плоскопараллельного перемещения",
+                    "Способ вращения вокруг линии уровня"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Для определения натуральной величины отрезка прямой общего положения и угла его наклона к горизонтальной плоскости проекций необходимо построить:",
+                options: [
+                    "Прямоугольный треугольник, где катетами являются горизонтальная проекция отрезка и разность аппликат его концов",
+                    "Прямоугольный треугольник, где катетами являются фронтальная проекция отрезка и разность ординат его концов",
+                    "Правильный треугольник по трем проекциям отрезка",
+                    "Параллелограмм на горизонтальной и фронтальной проекциях"
+                ],
+                correct: 0,
+                block: 1
+            },
+            {
+                question: "Точка принадлежит прямой, если на чертеже:",
+                options: [
+                    "Ее фронтальная проекция лежит на фронтальной проекции прямой",
+                    "Ее горизонтальная проекция лежит на горизонтальной проекции прямой",
+                    "Выполнены оба условия (а и б), и проекции точки лежат на одной линии связи",
+                    "Ее профильная проекция совпадает с профильной проекцией прямой"
+                ],
+                correct: 2,
+                block: 1
+            },
+            {
+                question: "Признаком пересекающихся прямых на чертеже является:",
+                options: [
+                    "Параллельность их одноименных проекций",
+                    "Пересечение их одноименных проекций в точках, лежащих на одной линии связи, перпендикулярной оси X",
+                    "Пересечение их разноименных проекций в произвольных точках",
+                    "Совпадение их фронтальных следов"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Что называется следом плоскости?",
+                options: [
+                    "Любая прямая, лежащая в плоскости",
+                    "Линия пересечения плоскости с плоскостью проекций",
+                    "Проекция плоскости на любую координатную ось",
+                    "Расстояние от начала координат до плоскости"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Горизонталь плоскости – это прямая, которая:",
+                options: [
+                    "Перпендикулярна фронтальной плоскости проекций",
+                    "Принадлежит данной плоскости и параллельна горизонтальной плоскости проекций",
+                    "Является линией наибольшего наклона плоскости к π1",
+                    "Проходит через ось X"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Линия наибольшего наклона плоскости к горизонтальной плоскости проекций:",
+                options: [
+                    "Параллельна горизонтальному следу плоскости",
+                    "Принадлежит плоскости и перпендикулярна ее горизонталям (и горизонтальному следу)",
+                    "Принадлежит плоскости и перпендикулярна ее фронталям",
+                    "Всегда совпадает с фронтальным следом"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Плоскость уровня относительно горизонтальной плоскости проекций:",
+                options: [
+                    "Перпендикулярна ей",
+                    "Параллельна ей",
+                    "Пересекает ее под произвольным углом",
+                    "Проецируется на нее в прямую линию"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Каким образом на чертеже можно задать плоскость?",
+                options: [
+                    "Тремя точками, не лежащими на одной прямой",
+                    "Прямой и точкой, не лежащей на этой прямой",
+                    "Двумя параллельными прямыми",
+                    "Верны все перечисленные способы"
+                ],
+                correct: 3,
+                block: 1
+            },
+            {
+                question: "Признак параллельности прямой и плоскости:",
+                options: [
+                    "Прямая параллельна любой прямой, лежащей в плоскости",
+                    "В плоскости можно провести прямую, параллельную данной",
+                    "Прямая перпендикулярна двум пересекающимся прямым в плоскости",
+                    "Прямая пересекает плоскость"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Алгоритм нахождения точки пересечения прямой общего положения с плоскостью общего положения (способ вспомогательной секущей плоскости) включает:",
+                options: [
+                    "Заключение прямой в проецирующую плоскость, нахождение линии пересечения этой плоскости с заданной и определение общей точки этой линии с исходной прямой",
+                    "Непосредственное определение точки по ее координатам",
+                    "Вращение прямой до положения уровня",
+                    "Построение линии наибольшего наклона"
+                ],
+                correct: 0,
+                block: 1
+            },
+            {
+                question: "Для определения угла наклона плоскости общего положения к горизонтальной плоскости проекций необходимо:",
+                options: [
+                    "Построить в плоскости горизонталь и измерить угол между ней и осью X",
+                    "Построить в плоскости линию наибольшего наклона к π1 и определить угол наклона этой линии к π1",
+                    "Измерить угол между следами плоскости",
+                    "Преобразовать плоскость в проецирующее положение"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Суть способа замены плоскостей проекций заключается в:",
+                options: [
+                    "Вращении геометрической фигуры вокруг оси",
+                    "Введении новой плоскости проекций, перпендикулярной одной из основных, чтобы фигура заняла частное положение",
+                    "Параллельном переносе фигуры в пространстве",
+                    "Совмещении плоскости фигуры с плоскостью проекций"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Чтобы преобразовать чертеж плоскости общего положения в чертеж проецирующей плоскости, новую ось проекций проводят:",
+                options: [
+                    "Параллельно горизонтальному следу плоскости",
+                    "Перпендикулярно горизонтальной проекции любой прямой уровня (например, горизонтали), лежащей в этой плоскости",
+                    "Произвольно",
+                    "Перпендикулярно фронтальному следу"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Каким свойством обладает плоскость уровня?",
+                options: [
+                    "Проецируется на параллельную ей плоскость проекций в натуральную величину",
+                    "Проецируется на любую плоскость проекций в прямую линию",
+                    "Не имеет следов",
+                    "Перпендикулярна всем плоскостям проекций"
+                ],
+                correct: 0,
+                block: 1
+            },
+            {
+                question: "Проецирующая прямая – это прямая, которая:",
+                options: [
+                    "Параллельна одной из плоскостей проекций",
+                    "Перпендикулярна одной из плоскостей проекций (проецируется на нее в точку)",
+                    "Наклонена ко всем плоскостям проекций",
+                    "Является линией уровня"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Что называется натуральной величиной (Н.В.) отрезка?",
+                options: [
+                    "Длина его горизонтальной проекции",
+                    "Длина его фронтальной проекции",
+                    "Его истинная длина в пространстве",
+                    "Длина его профильной проекции"
+                ],
+                correct: 2,
+                block: 1
+            },
+            {
+                question: "Точки, лежащие на одной проецирующей прямой, называются:",
+                options: [
+                    "Следующими",
+                    "Конкурирующими",
+                    "Смежными",
+                    "Параллельными"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Для чего используются конкурирующие точки?",
+                options: [
+                    "Для определения видимости геометрических фигур на проекциях",
+                    "Для нахождения следов прямой",
+                    "Для построения линий уровня",
+                    "Для определения углов"
+                ],
+                correct: 0,
+                block: 1
+            },
+            {
+                question: "Какой из перечисленных объектов является линейчатой поверхностью?",
+                options: [
+                    "Сфера",
+                    "Тор",
+                    "Цилиндр",
+                    "Эллипсоид"
+                ],
+                correct: 2,
+                block: 1
+            },
+            {
+                question: "Поверхность, образованная движением прямой линии (образующей) по трем направляющим, называется:",
+                options: [
+                    "Поверхностью вращения",
+                    "Торсовой поверхностью",
+                    "Линейчатой поверхностью с тремя направляющими (например, цилиндроид)",
+                    "Винтовой поверхностью"
+                ],
+                correct: 2,
+                block: 1
+            },
+            {
+                question: "Определитель поверхности состоит из:",
+                options: [
+                    "Только геометрической части",
+                    "Только алгоритмической части",
+                    "Геометрической и алгоритмической частей",
+                    "Названия и чертежа"
+                ],
+                correct: 2,
+                block: 1
+            },
+            {
+                question: "Поверхность, которую можно совместить с плоскостью без разрывов и складок, называется:",
+                options: [
+                    "Нелинейчатой",
+                    "Развертываемой",
+                    "Замкнутой",
+                    "Проецирующей"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Какая поверхность образуется при вращении прямой вокруг параллельной ей оси?",
+                options: [
+                    "Конус вращения",
+                    "Цилиндр вращения",
+                    "Однополостный гиперболоид вращения",
+                    "Сфера"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Какая поверхность образуется при вращении окружности вокруг оси, лежащей в плоскости окружности, но не проходящей через ее центр?",
+                options: [
+                    "Сфера",
+                    "Тор (торовая поверхность)",
+                    "Эллипсоид вращения",
+                    "Параболоид вращения"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Через каждую точку однополостного гиперболоида вращения можно провести:",
+                options: [
+                    "Только одну прямолинейную образующую",
+                    "Две прямолинейные образующие",
+                    "Бесконечное множество прямолинейных образующих",
+                    "Ни одной прямой"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Винтовая поверхность (геликоид) образуется:",
+                options: [
+                    "Вращением образующей вокруг оси",
+                    "Поступательным движением образующей",
+                    "Сложным винтовым движением образующей (вращение + поступательное движение)",
+                    "Перемещением окружности"
+                ],
+                correct: 2,
+                block: 1
+            },
+            {
+                question: "Прямой геликоид характеризуется тем, что его образующая:",
+                options: [
+                    "Пересекает ось",
+                    "Перпендикулярна оси",
+                    "Скрещивается с осью",
+                    "Параллельна оси"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Первая основная позиционная задача – это задача на:",
+                options: [
+                    "Построение линии пересечения двух поверхностей",
+                    "Построение точки пересечения линии с поверхностью",
+                    "Определение расстояния от точки до плоскости",
+                    "Построение развертки поверхности"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Вторая основная позиционная задача – это задача на:",
+                options: [
+                    "Определение угла между скрещивающимися прямыми",
+                    "Построение линии пересечения двух поверхностей",
+                    "Построение точки пересечения прямой с плоскостью",
+                    "Определение натуральной величины фигуры"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Решение задачи на пересечение значительно упрощается, если:",
+                options: [
+                    "Обе фигуры занимают общее положение",
+                    "Хотя бы одна из фигур занимает проецирующее положение",
+                    "Плоскости проекций заменены",
+                    "Используется аксонометрия"
+                ],
+                correct: 1,
+                block: 1
+            },
+            {
+                question: "Алгоритм нахождения линии пересечения двух поверхностей, одна из которых – проецирующий цилиндр, включает:",
+                options: [
+                    "Заключение цилиндра во вспомогательную плоскость
